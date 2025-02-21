@@ -12,51 +12,51 @@ def get_version():
     return (major, minor, patch)
 
 #Mark = yaml.error.Mark
-YAMLError = yaml.error.YAMLError
-ReaderError = yaml.reader.ReaderError
-ScannerError = yaml.scanner.ScannerError
-ParserError = yaml.parser.ParserError
-ComposerError = yaml.composer.ComposerError
-ConstructorError = yaml.constructor.ConstructorError
-EmitterError = yaml.emitter.EmitterError
-SerializerError = yaml.serializer.SerializerError
-RepresenterError = yaml.representer.RepresenterError
+cdef object YAMLError = yaml.error.YAMLError
+cdef object ReaderError = yaml.reader.ReaderError
+cdef object ScannerError = yaml.scanner.ScannerError
+cdef object ParserError = yaml.parser.ParserError
+cdef object ComposerError = yaml.composer.ComposerError
+cdef object ConstructorError = yaml.constructor.ConstructorError
+cdef object EmitterError = yaml.emitter.EmitterError
+cdef object SerializerError = yaml.serializer.SerializerError
+cdef object RepresenterError = yaml.representer.RepresenterError
 
-StreamStartToken = yaml.tokens.StreamStartToken
-StreamEndToken = yaml.tokens.StreamEndToken
-DirectiveToken = yaml.tokens.DirectiveToken
-DocumentStartToken = yaml.tokens.DocumentStartToken
-DocumentEndToken = yaml.tokens.DocumentEndToken
-BlockSequenceStartToken = yaml.tokens.BlockSequenceStartToken
-BlockMappingStartToken = yaml.tokens.BlockMappingStartToken
-BlockEndToken = yaml.tokens.BlockEndToken
-FlowSequenceStartToken = yaml.tokens.FlowSequenceStartToken
-FlowMappingStartToken = yaml.tokens.FlowMappingStartToken
-FlowSequenceEndToken = yaml.tokens.FlowSequenceEndToken
-FlowMappingEndToken = yaml.tokens.FlowMappingEndToken
-KeyToken = yaml.tokens.KeyToken
-ValueToken = yaml.tokens.ValueToken
-BlockEntryToken = yaml.tokens.BlockEntryToken
-FlowEntryToken = yaml.tokens.FlowEntryToken
-AliasToken = yaml.tokens.AliasToken
-AnchorToken = yaml.tokens.AnchorToken
-TagToken = yaml.tokens.TagToken
-ScalarToken = yaml.tokens.ScalarToken
+cdef object StreamStartToken = yaml.tokens.StreamStartToken
+cdef object StreamEndToken = yaml.tokens.StreamEndToken
+cdef object DirectiveToken = yaml.tokens.DirectiveToken
+cdef object DocumentStartToken = yaml.tokens.DocumentStartToken
+cdef object DocumentEndToken = yaml.tokens.DocumentEndToken
+cdef object BlockSequenceStartToken = yaml.tokens.BlockSequenceStartToken
+cdef object BlockMappingStartToken = yaml.tokens.BlockMappingStartToken
+cdef object BlockEndToken = yaml.tokens.BlockEndToken
+cdef object FlowSequenceStartToken = yaml.tokens.FlowSequenceStartToken
+cdef object FlowMappingStartToken = yaml.tokens.FlowMappingStartToken
+cdef object FlowSequenceEndToken = yaml.tokens.FlowSequenceEndToken
+cdef object FlowMappingEndToken = yaml.tokens.FlowMappingEndToken
+cdef object KeyToken = yaml.tokens.KeyToken
+cdef object ValueToken = yaml.tokens.ValueToken
+cdef object BlockEntryToken = yaml.tokens.BlockEntryToken
+cdef object FlowEntryToken = yaml.tokens.FlowEntryToken
+cdef object AliasToken = yaml.tokens.AliasToken
+cdef object AnchorToken = yaml.tokens.AnchorToken
+cdef object TagToken = yaml.tokens.TagToken
+cdef object ScalarToken = yaml.tokens.ScalarToken
 
-StreamStartEvent = yaml.events.StreamStartEvent
-StreamEndEvent = yaml.events.StreamEndEvent
-DocumentStartEvent = yaml.events.DocumentStartEvent
-DocumentEndEvent = yaml.events.DocumentEndEvent
-AliasEvent = yaml.events.AliasEvent
-ScalarEvent = yaml.events.ScalarEvent
-SequenceStartEvent = yaml.events.SequenceStartEvent
-SequenceEndEvent = yaml.events.SequenceEndEvent
-MappingStartEvent = yaml.events.MappingStartEvent
-MappingEndEvent = yaml.events.MappingEndEvent
+cdef object StreamStartEvent = yaml.events.StreamStartEvent
+cdef object StreamEndEvent = yaml.events.StreamEndEvent
+cdef object DocumentStartEvent = yaml.events.DocumentStartEvent
+cdef object DocumentEndEvent = yaml.events.DocumentEndEvent
+cdef object AliasEvent = yaml.events.AliasEvent
+cdef object ScalarEvent = yaml.events.ScalarEvent
+cdef object SequenceStartEvent = yaml.events.SequenceStartEvent
+cdef object SequenceEndEvent = yaml.events.SequenceEndEvent
+cdef object MappingStartEvent = yaml.events.MappingStartEvent
+cdef object MappingEndEvent = yaml.events.MappingEndEvent
 
-ScalarNode = yaml.nodes.ScalarNode
-SequenceNode = yaml.nodes.SequenceNode
-MappingNode = yaml.nodes.MappingNode
+cdef object ScalarNode = yaml.nodes.ScalarNode
+cdef object SequenceNode = yaml.nodes.SequenceNode
+cdef object MappingNode = yaml.nodes.MappingNode
 
 cdef class Mark:
     cdef readonly object name
