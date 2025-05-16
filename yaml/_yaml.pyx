@@ -83,6 +83,13 @@ cdef class Mark:
                 % (self.name, self.line+1, self.column+1)
         return where
 
+# Helper function to create a Mark object with a single call
+cdef Mark _create_mark(object name, size_t index, size_t line, size_t column,
+        object buffer, object pointer):
+    cdef Mark mark = Mark.__new__(Mark)
+    mark._fast_init(name, index, line, column, buffer, pointer)
+    return mark
+
 #class YAMLError(Exception):
 #    pass
 #
@@ -310,12 +317,12 @@ cdef class CParser:
             context_mark = None
             problem_mark = None
             if self.parser.context != NULL:
-                context_mark = Mark(self.stream_name,
+                context_mark = _create_mark(self.stream_name,
                         self.parser.context_mark.index,
                         self.parser.context_mark.line,
                         self.parser.context_mark.column, None, None)
             if self.parser.problem != NULL:
-                problem_mark = Mark(self.stream_name,
+                problem_mark = _create_mark(self.stream_name,
                         self.parser.problem_mark.index,
                         self.parser.problem_mark.line,
                         self.parser.problem_mark.column, None, None)
@@ -356,12 +363,12 @@ cdef class CParser:
         return token_object
 
     cdef object _token_to_object(self, yaml_token_t *token):
-        start_mark = Mark(self.stream_name,
+        cdef Mark start_mark = _create_mark(self.stream_name,
                 token.start_mark.index,
                 token.start_mark.line,
                 token.start_mark.column,
                 None, None)
-        end_mark = Mark(self.stream_name,
+        cdef Mark end_mark = _create_mark(self.stream_name,
                 token.end_mark.index,
                 token.end_mark.line,
                 token.end_mark.column,
@@ -503,12 +510,12 @@ cdef class CParser:
 
     cdef object _event_to_object(self, yaml_event_t *event):
         cdef yaml_tag_directive_t *tag_directive
-        start_mark = Mark(self.stream_name,
+        cdef Mark start_mark = _create_mark(self.stream_name,
                 event.start_mark.index,
                 event.start_mark.line,
                 event.start_mark.column,
                 None, None)
-        end_mark = Mark(self.stream_name,
+        cdef Mark end_mark = _create_mark(self.stream_name,
                 event.end_mark.index,
                 event.end_mark.line,
                 event.end_mark.column,
@@ -673,7 +680,7 @@ cdef class CParser:
             document = self._compose_document()
         self._parse_next_event()
         if self.parsed_event.type != YAML_STREAM_END_EVENT:
-            mark = Mark(self.stream_name,
+            mark = _create_mark(self.stream_name,
                     self.parsed_event.start_mark.index,
                     self.parsed_event.start_mark.line,
                     self.parsed_event.start_mark.column,
@@ -695,7 +702,7 @@ cdef class CParser:
         if self.parsed_event.type == YAML_ALIAS_EVENT:
             anchor = PyUnicode_FromYamlString(self.parsed_event.data.alias.anchor)
             if anchor not in self.anchors:
-                mark = Mark(self.stream_name,
+                mark = _create_mark(self.stream_name,
                         self.parsed_event.start_mark.index,
                         self.parsed_event.start_mark.line,
                         self.parsed_event.start_mark.column,
@@ -715,7 +722,7 @@ cdef class CParser:
             anchor = PyUnicode_FromYamlString(self.parsed_event.data.mapping_start.anchor)
         if anchor is not None:
             if anchor in self.anchors:
-                mark = Mark(self.stream_name,
+                mark = _create_mark(self.stream_name,
                         self.parsed_event.start_mark.index,
                         self.parsed_event.start_mark.line,
                         self.parsed_event.start_mark.column,
@@ -733,12 +740,12 @@ cdef class CParser:
         return node
 
     cdef _compose_scalar_node(self, object anchor):
-        start_mark = Mark(self.stream_name,
+        cdef Mark start_mark = _create_mark(self.stream_name,
                 self.parsed_event.start_mark.index,
                 self.parsed_event.start_mark.line,
                 self.parsed_event.start_mark.column,
                 None, None)
-        end_mark = Mark(self.stream_name,
+        cdef Mark end_mark = _create_mark(self.stream_name,
                 self.parsed_event.end_mark.index,
                 self.parsed_event.end_mark.line,
                 self.parsed_event.end_mark.column,
@@ -776,11 +783,12 @@ cdef class CParser:
 
     cdef _compose_sequence_node(self, object anchor):
         cdef int index
-        start_mark = Mark(self.stream_name,
+        cdef Mark start_mark = _create_mark(self.stream_name,
                 self.parsed_event.start_mark.index,
                 self.parsed_event.start_mark.line,
                 self.parsed_event.start_mark.column,
                 None, None)
+        cdef Mark end_mark
         implicit = False
         if self.parsed_event.data.sequence_start.implicit == 1:
             implicit = True
@@ -806,7 +814,8 @@ cdef class CParser:
             value.append(self._compose_node(node, index))
             index = index+1
             self._parse_next_event()
-        node.end_mark = Mark(self.stream_name,
+
+        end_mark = _create_mark(self.stream_name,
                 self.parsed_event.end_mark.index,
                 self.parsed_event.end_mark.line,
                 self.parsed_event.end_mark.column,
@@ -815,7 +824,7 @@ cdef class CParser:
         return node
 
     cdef _compose_mapping_node(self, object anchor):
-        start_mark = Mark(self.stream_name,
+        cdef Mark start_mark = _create_mark(self.stream_name,
                 self.parsed_event.start_mark.index,
                 self.parsed_event.start_mark.line,
                 self.parsed_event.start_mark.column,
@@ -845,7 +854,7 @@ cdef class CParser:
             item_value = self._compose_node(node, item_key)
             value.append((item_key, item_value))
             self._parse_next_event()
-        node.end_mark = Mark(self.stream_name,
+        cdef Mark end_mark = _create_mark(self.stream_name,
                 self.parsed_event.end_mark.index,
                 self.parsed_event.end_mark.line,
                 self.parsed_event.end_mark.column,
